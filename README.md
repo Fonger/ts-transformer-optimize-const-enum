@@ -1,6 +1,8 @@
 # ts-transformer-optimize-const-enum
 
-A typescript transpiler that transform exported const enum into object literal! This is just like the one from [@babel/preset-typescript or @babel/plugin-transform-typescript with optimizeConstEnums: true](https://babeljs.io/docs/en/babel-preset-typescript#optimizeconstenums) but it works for typescript compiler.
+A typescript transpiler that transform exported const enum into object literal.
+
+This is just like the one from [@babel/preset-typescript with optimizeConstEnums: true](https://babeljs.io/docs/en/babel-preset-typescript#optimizeconstenums) but it works for typescript compiler.
 
 This will transform exported const enum from
 
@@ -8,9 +10,9 @@ This will transform exported const enum from
 export const enum MyEnum {
   A,
   B,
-  C
+  C,
   D = 10,
-  D = C * 200
+  E = C * 200
 }
 ```
 
@@ -23,21 +25,110 @@ export const MyEnum {
   C: 2,
   D: 10,
   E: 400
-}
+} as const
 ```
 
-while stripping const in declaration file, to make your code compatible with `--isolatedModules`
+and it also strips `const` in declaration file, to make your code compatible with [`--isolatedModules`](https://www.typescriptlang.org/tsconfig#isolatedModules)
 
 ```ts
-declare enum MyEnum { ... }
+// my-enum.d.ts
+declare enum MyEnum { A: 0, ... }
 ```
 
 ## Why?
-WIP
+
+Const enum can only works in the same file. It works by inlining the exact value into code.
+With [isolateModules](https://www.typescriptlang.org/tsconfig#isolatedModules), you can't use the exported const enum. The solution is to enable [preserveConstEnums](https://www.typescriptlang.org/tsconfig#preserveConstEnums) option to convert const enum to regular enum.
+
+However, the regular enum compiles to
+
+```js
+export var MyEnum;
+(function(MyEnum) {
+  MyEnum[MyEnum['A'] = 0] = 'A';
+  MyEnum[MyEnum['B'] = 1] = 'B';
+  MyEnum[MyEnum['C'] = 2] = 'C';
+  MyEnum[MyEnum['D'] = 10] = 'D';
+  MyEnum[MyEnum['E'] = 400] = 'E';
+})(MyEnum || (MyEnum = {}));
+```
+
+which is ugly and waste a lot of bytes. Not only can't you take advantage of enum inlining, but it also wastes a lot of bytes. That's why this transform existed.
 
 # Usage
 
-WIP
+## ttypescript
+
+If you use vanilla TypeScript compiler, you can use this with [ttypescript](https://github.com/cevek/ttypescript) and compile with `ttsc` instead of `tsc`
+
+```js
+// tsconfig.json
+{
+  "compilerOptions": {
+    // ...
+    "plugins": [
+      { "transform": "ts-transformer-optimize-const-enum" },
+      { "transform": "ts-transformer-optimize-const-enum", "afterDeclarations": true },
+    ]
+  },
+  // ...
+}
+```
+
+The afterDeclarations part is to strip out const keyword from declaration file.
+
+## webpack (with ts-loader or awesome-typescript-loader)
+
+```js
+// webpack.config.js
+const optimizeConstEnum = require('ts-transformer-optimize-const-enum').default;
+
+module.exports = {
+  // ...
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        loader: 'ts-loader', // or 'awesome-typescript-loader'
+        options: {
+          getCustomTransformers: program => ({
+            before: [
+              optimizeConstEnum(program),
+            ],
+            afterDeclarations: [
+              optimizeConstEnum(program),
+            ],
+          }),
+        },
+      },
+    ],
+  },
+};
+```
+
+## Rollup (with rollup-plugin-typescript2)
+
+```js
+// rollup.config.js
+import typescript from 'rollup-plugin-typescript2';
+import optimizeConstEnum from 'ts-transformer-optimize-const-enum';
+
+export default {
+  // ...
+  plugins: [
+    typescript({
+      transformers: [service => ({
+        before: [
+          optimizeConstEnum(service.getProgram()),
+        ],
+        afterDeclarations: [
+          optimizeConstEnum(service.getProgram()),
+        ],
+      })],
+    }),
+  ],
+};
+```
 
 # Caveats
 
@@ -52,4 +143,3 @@ export const enum WorkingEnum {}
 const enum FailingEnum {}
 export FailEnum;
 ```
-
