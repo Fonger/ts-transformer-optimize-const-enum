@@ -2,9 +2,9 @@
   "name": "ts-transformer-optimize-const-enum",
   "version": "0.0.1",
   "description": "A TypeScript transformer that optimize exported const enum into object literal",
-  "main": "dist/cjs/index.js",
-  "module": "dist/ejs/index.js",
-  "types": "dist/cjs/index.d.ts",
+  "main": "dist/cjs/transform.js",
+  "module": "dist/ejs/transform.js",
+  "types": "dist/cjs/transform.d.ts",
   "repository": "git@github.com:Fonger/ts-transformer-optimize-const-enum.git",
   "author": "Fonger <5862369+Fonger@users.noreply.github.com>",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "ttypescript"
   ],
   "scripts": {
-    "build": "rm -rf dist && yarn build:cjs && yarn build:ejs",
+    "build": "rm -rf dist && npm run build:cjs && npm run build:ejs",
     "build:cjs": "tsc --outDir dist/cjs --declaration",
     "build:ejs": "tsc --outDir dist/ejs --module es6"
   },
