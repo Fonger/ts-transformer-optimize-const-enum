@@ -55,11 +55,17 @@ export var MyEnum;
 
 which is ugly and waste a lot of bytes. Not only can't you take advantage of enum inlining, but it also wastes a lot of bytes. That's why this transform existed.
 
+# Installation
+
+```sh
+npm install ts-transformer-optimize-const-enum --save-dev
+```
+
 # Usage
 
-## ttypescript
-
 If you use vanilla TypeScript compiler, you can use this with [ttypescript](https://github.com/cevek/ttypescript) and compile with `ttsc` instead of `tsc`
+
+## ttypescript
 
 ```js
 // tsconfig.json
