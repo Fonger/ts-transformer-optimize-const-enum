@@ -1,6 +1,6 @@
 # ts-transformer-optimize-const-enum
 
-[![](https://img.shields.io/npm/v/ts-transformer-optimize-const-enum.svg)](https://www.npmjs.com/package/ts-transformer-optimize-const-enum) ![CI Status](https://github.com/Fonger/ts-transformer-optimize-const-enum/actions/workflows/test.yml/badge.svg)
+[![](https://img.shields.io/npm/v/ts-transformer-optimize-const-enum.svg)](https://www.npmjs.com/package/ts-transformer-optimize-const-enum) ![CI Status](https://github.com/Fonger/ts-transformer-optimize-const-enum/actions/workflows/test.yml/badge.svg) [![codecov](https://codecov.io/gh/Fonger/ts-transformer-optimize-const-enum/branch/main/graph/badge.svg?token=CHDVP7EMNA)](https://codecov.io/gh/Fonger/ts-transformer-optimize-const-enum)
 
 A typescript transformer that convert exported const enum into object literal.
 
