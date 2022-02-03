@@ -40,9 +40,20 @@ declare enum MyEnum { A: 0, ... }
 ## Why?
 
 Const enum can only works in the same file. It works by inlining the exact value into code.
-With [isolateModules](https://www.typescriptlang.org/tsconfig#isolatedModules), you can't use the exported const enum. The solution is to enable [preserveConstEnums](https://www.typescriptlang.org/tsconfig#preserveConstEnums) option to convert const enum to regular enum.
 
-However, the regular enum compiles to
+```ts
+if (cond === MyEnum.A) { /*...*/ }
+```
+
+will compile to the following code. That's a great inline optimization.
+
+```ts
+if (cond === 0 /* A */) { /*...*/ }
+```
+
+However, const enums only work in the same file with [isolateModules](https://www.typescriptlang.org/tsconfig#isolatedModules). Therefore, you can't use the exported const enum. The solution is to enable [preserveConstEnums](https://www.typescriptlang.org/tsconfig#preserveConstEnums) option to convert const enums to regular enums.
+
+And the regular enum compiles to
 
 ```js
 export var MyEnum;
@@ -55,7 +66,7 @@ export var MyEnum;
 })(MyEnum || (MyEnum = {}));
 ```
 
-Not only can't you take advantage of enum inlining, but it also wastes a lot of bytes. That's the reason why this transform is made.
+which is verbose. Not only can't you take advantage of enum inlining, but it also wastes a lot of bytes. That's the reason why this transform is made.
 
 # Installation
 
