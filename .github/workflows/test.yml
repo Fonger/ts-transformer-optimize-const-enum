@@ -18,11 +18,11 @@ jobs:
       with:
         node-version: 16.x
         cache: 'yarn'
-    - run: yarn install --frozen-lockfile
+      run: yarn install --frozen-lockfile
     - name: Run Linter
-    - run: yarn lint
+      run: yarn lint
     - name: Test
-    - run: yarn test
+      run: yarn test
     - name: Upload coverage report to Codecov
       uses: codecov/codecov-action@v2.1.0
       with:
