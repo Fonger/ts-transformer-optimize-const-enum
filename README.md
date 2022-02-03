@@ -2,7 +2,7 @@
 
 [![](https://img.shields.io/npm/v/ts-transformer-optimize-const-enum.svg)](https://www.npmjs.com/package/ts-transformer-optimize-const-enum) ![CI Status](https://github.com/Fonger/ts-transformer-optimize-const-enum/actions/workflows/build.yml/badge.svg)
 
-A typescript transpiler that transform exported const enum into object literal.
+A typescript transformer that convert exported const enum into object literal.
 
 This is just like the one from [@babel/preset-typescript with optimizeConstEnums: true](https://babeljs.io/docs/en/babel-preset-typescript#optimizeconstenums) but it works for typescript compiler.
 
@@ -55,7 +55,7 @@ export var MyEnum;
 })(MyEnum || (MyEnum = {}));
 ```
 
-which is ugly and waste a lot of bytes. Not only can't you take advantage of enum inlining, but it also wastes a lot of bytes. That's why this transform existed.
+Not only can't you take advantage of enum inlining, but it also wastes a lot of bytes. That's the reason why this transform is made.
 
 # Installation
 
@@ -141,7 +141,6 @@ export default {
 # Caveats
 
 Currently, only immediate export const enum works. For example:
-This will be fixed in later version.
 
 ```ts
 // The following works
@@ -151,3 +150,5 @@ export const enum WorkingEnum {}
 const enum FailingEnum {}
 export FailEnum;
 ```
+
+This may be fixed in future release.
