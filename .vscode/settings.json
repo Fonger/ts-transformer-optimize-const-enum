@@ -9,5 +9,8 @@
   "[json]": {
     "editor.defaultFormatter": "dprint.dprint"
   },
+  "[md]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
   "dprint.path": "./node_modules/dprint/bin.js"
 }

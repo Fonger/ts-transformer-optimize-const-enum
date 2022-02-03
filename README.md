@@ -12,7 +12,7 @@ export const enum MyEnum {
   B,
   C,
   D = 10,
-  E = C * 200
+  E = C * 200,
 }
 ```
 

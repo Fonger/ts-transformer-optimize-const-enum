@@ -12,7 +12,8 @@
   "includes": ["**/*.{ts,tsx,js,jsx,cjs,mjs,json,md}"],
   "excludes": [
     "**/node_modules",
-    "**/*-lock.json"
+    "**/*-lock.json",
+    "dist"
   ],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.62.2.wasm",
