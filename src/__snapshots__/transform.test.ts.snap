@@ -1,0 +1,58 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`transform export const enum into object literal test-case/const-enum.d.ts 1`] = `
+"export declare enum SomeEnum {
+    A = 0,
+    B = 1,
+    C = \\"hello\\",
+    D = 1000,
+    E = 1001
+}
+export declare enum ComputedEnum {
+    A = 0,
+    B = 1,
+    C = 2,
+    D = -2,
+    E = 4,
+    F = -1,
+    G = 1228,
+    H = 31,
+    I = 230,
+    J = \\"12\\",
+    K = 1
+}
+export declare enum RegularEnum {
+    A = 0,
+    B = 1
+}
+"
+`;
+
+exports[`transform export const enum into object literal test-case/const-enum.js 1`] = `
+"export const SomeEnum = {
+    A: 0,
+    B: 1,
+    C: \\"hello\\",
+    D: 1000,
+    E: 1001
+};
+export const ComputedEnum = {
+    A: 0,
+    B: 1,
+    C: 2,
+    D: -2,
+    E: 4,
+    F: -1,
+    G: 1228,
+    H: 31,
+    I: 230,
+    J: \\"12\\",
+    K: 1
+};
+export var RegularEnum;
+(function (RegularEnum) {
+    RegularEnum[RegularEnum[\\"A\\"] = 0] = \\"A\\";
+    RegularEnum[RegularEnum[\\"B\\"] = 1] = \\"B\\";
+})(RegularEnum || (RegularEnum = {}));
+"
+`;

@@ -1,7 +1,7 @@
 import ts from 'typescript';
 import { evaluate, hasModifier } from './utils';
 
-export default function(program: ts.Program, pluginOptions: unknown) {
+export default function(program: ts.Program, pluginOptions?: unknown) {
   return (ctx: ts.TransformationContext) => {
     return (sourceFile: ts.SourceFile) => {
       const ambient = sourceFile.isDeclarationFile;
