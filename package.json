@@ -20,7 +20,9 @@
   "scripts": {
     "build": "rm -rf dist && npm run build:cjs && npm run build:ejs",
     "build:cjs": "tsc --outDir dist/cjs --declaration",
-    "build:ejs": "tsc --outDir dist/ejs --module es6"
+    "build:ejs": "tsc --outDir dist/ejs --module es6",
+    "lint": "dprint check && eslint .",
+    "format": "dprint fmt"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.10.2",
