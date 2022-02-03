@@ -1,5 +1,7 @@
 # ts-transformer-optimize-const-enum
 
+![CI Status](https://github.com/Fonger/ts-transformer-optimize-const-enum/actions/workflows/build.yml/badge.svg)
+
 A typescript transpiler that transform exported const enum into object literal.
 
 This is just like the one from [@babel/preset-typescript with optimizeConstEnums: true](https://babeljs.io/docs/en/babel-preset-typescript#optimizeconstenums) but it works for typescript compiler.
