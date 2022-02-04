@@ -69,9 +69,9 @@ export function evaluate(
   return undefined;
 }
 
-export function hasModifier(node: ts.Node, modifier: ts.SyntaxKind): boolean {
+export function getModifier(node: ts.Node, modifier: ts.SyntaxKind) {
   return (
     node.modifiers
-    && node.modifiers.some((mod: ts.Modifier) => mod.kind === modifier)
+    && node.modifiers.find((mod: ts.Modifier) => mod.kind === modifier)
   );
 }

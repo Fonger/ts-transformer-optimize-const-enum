@@ -1,5 +1,5 @@
 import ts from 'typescript';
-import { evaluate, hasModifier } from './utils';
+import { evaluate, getModifier } from './utils';
 
 export default function(program: ts.Program, pluginOptions?: unknown) {
   return (ctx: ts.TransformationContext) => {
@@ -12,18 +12,16 @@ export default function(program: ts.Program, pluginOptions?: unknown) {
         if (!ts.isEnumDeclaration(node)) {
           return ts.visitEachChild(node, visitor, ctx);
         }
-        if (
-          !hasModifier(node, ts.SyntaxKind.ExportKeyword)
-          || !hasModifier(node, ts.SyntaxKind.ConstKeyword)
-        ) {
-          return node;
-        }
+        const exportModifier = getModifier(node, ts.SyntaxKind.ExportKeyword);
+        if (!exportModifier) return node;
+        const constModifier = getModifier(node, ts.SyntaxKind.ConstKeyword);
+        if (!constModifier) return node;
 
         if (ambient) {
           return ts.visitEachChild(node, stripConstKeyword, ctx);
         }
 
-        return transformEnum(node);
+        return transformEnum(node, [exportModifier, constModifier]);
       }
     };
   };
@@ -32,10 +30,10 @@ export default function(program: ts.Program, pluginOptions?: unknown) {
     return node.kind === ts.SyntaxKind.ConstKeyword ? undefined : node;
   }
 
-  function transformEnum(node: ts.EnumDeclaration) {
+  function transformEnum(node: ts.EnumDeclaration, modifiers: ts.Modifier[]) {
     const members = node.members;
     const known = new Map<string, number | string>();
-    const ast = [];
+    const properties: ts.PropertyAssignment[] = [];
     let lastValue: string | number = -1;
 
     for (const member of members) {
@@ -44,10 +42,11 @@ export default function(program: ts.Program, pluginOptions?: unknown) {
       }
       const name = member.name.getText();
       let value: string | number;
+      let valueExpr: ts.Expression;
 
       if (member.initializer) {
         value = evaluate(member.initializer, known);
-        let valueExpr: ts.Expression;
+
         if (typeof value === 'number') {
           valueExpr = ts.factory.createNumericLiteral(value);
           lastValue = value;
@@ -55,8 +54,6 @@ export default function(program: ts.Program, pluginOptions?: unknown) {
           valueExpr = ts.factory.createStringLiteral(value);
           lastValue = value;
         } else throw new Error('Unsupported member value');
-
-        ast.push(ts.factory.createPropertyAssignment(name, valueExpr));
       } else {
         if (typeof lastValue === 'string') {
           throw new Error('Invalid enum');
@@ -72,21 +69,16 @@ export default function(program: ts.Program, pluginOptions?: unknown) {
          * }
          */
         value = ++lastValue;
-        ast.push(
-          ts.factory.createPropertyAssignment(
-            name,
-            ts.factory.createNumericLiteral(value),
-          ),
-        );
+        valueExpr = ts.factory.createNumericLiteral(value);
       }
+      const assignment = ts.factory.createPropertyAssignment(name, valueExpr);
+      ts.setSourceMapRange(assignment, ts.getSourceMapRange(member));
+      properties.push(assignment);
       known.set(name, value);
     }
 
-    return ts.factory.createVariableStatement(
-      [
-        ts.factory.createModifier(ts.SyntaxKind.ExportKeyword),
-        ts.factory.createModifier(ts.SyntaxKind.ConstKeyword),
-      ],
+    const result = ts.factory.createVariableStatement(
+      modifiers,
       ts.factory.createVariableDeclarationList(
         [
           ts.factory.createVariableDeclaration(
@@ -94,7 +86,7 @@ export default function(program: ts.Program, pluginOptions?: unknown) {
             undefined,
             undefined,
             ts.factory.createAsExpression(
-              ts.factory.createObjectLiteralExpression(ast, true),
+              ts.factory.createObjectLiteralExpression(properties, true),
               ts.factory.createTypeReferenceNode(
                 ts.factory.createIdentifier('const'),
                 undefined,
@@ -105,5 +97,8 @@ export default function(program: ts.Program, pluginOptions?: unknown) {
         ts.NodeFlags.Const,
       ),
     );
+
+    ts.setSourceMapRange(result, ts.getSourceMapRange(node));
+    return result;
   }
 }

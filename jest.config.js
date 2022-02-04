@@ -8,4 +8,5 @@ module.exports = {
     },
   },
   testPathIgnorePatterns: ['dist'],
+  coverageReporters: ['text', process.env.CI === 'true' ? 'lcovonly' : 'lcov'],
 };
