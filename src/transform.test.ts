@@ -1,6 +1,5 @@
 import ts from 'typescript';
 import transform from './transform';
-
 describe('transform export const enum into object literal', () => {
   const output = compile('test-case/const-enum.ts');
 
@@ -20,6 +19,7 @@ function compile(fileName: string): Output {
       module: ts.ModuleKind.ES2015,
       preserveConstEnums: true,
       declaration: true,
+      sourceMap: true,
       moduleResolution: ts.ModuleResolutionKind.NodeJs,
     },
   });

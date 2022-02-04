@@ -54,5 +54,7 @@ export var RegularEnum;
     RegularEnum[RegularEnum[\\"A\\"] = 0] = \\"A\\";
     RegularEnum[RegularEnum[\\"B\\"] = 1] = \\"B\\";
 })(RegularEnum || (RegularEnum = {}));
-"
+//# sourceMappingURL=const-enum.js.map"
 `;
+
+exports[`transform export const enum into object literal test-case/const-enum.js.map 1`] = `"{\\"version\\":3,\\"file\\":\\"const-enum.js\\",\\"sourceRoot\\":\\"\\",\\"sources\\":[\\"const-enum.ts\\"],\\"names\\":[],\\"mappings\\":\\"AAAA,MAAM,OAAY,QAAQ;IACxB,IAAC;IACD,IAAC;IACD,UAAW;IACX,OAAQ;IACR,OAAC;EACF;AAED,MAAM,OAAY,YAAY;IAC5B,IAAC;IACD,IAAC;IACD,IAAC;IACD,KAAU;IACV,IAAU;IACV,KAAc;IACd,OAAuB;IACvB,KAA4B;IAC5B,MAAgB;IAChB,OAAa;IACb,IAAoB;EACrB;AAED,MAAM,CAAN,IAAY,WAGX;AAHD,WAAY,WAAW;IACrB,uCAAC,CAAA;IACD,uCAAC,CAAA;AACH,CAAC,EAHW,WAAW,KAAX,WAAW,QAGtB\\"}"`;
