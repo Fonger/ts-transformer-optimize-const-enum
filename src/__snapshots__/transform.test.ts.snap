@@ -21,10 +21,12 @@ export declare enum ComputedEnum {
     J = \\"12\\",
     K = 1
 }
-export declare enum RegularEnum {
+declare enum NonExportEnum {
     A = 0,
     B = 1
 }
+declare function SomeFunc(inlineSomeEnum: SomeEnum, inlineComputedEnum: ComputedEnum): SomeEnum.D | ComputedEnum | NonExportEnum;
+export default SomeFunc;
 "
 `;
 
@@ -49,12 +51,21 @@ export const ComputedEnum = {
     J: \\"12\\",
     K: 1
 };
-export var RegularEnum;
-(function (RegularEnum) {
-    RegularEnum[RegularEnum[\\"A\\"] = 0] = \\"A\\";
-    RegularEnum[RegularEnum[\\"B\\"] = 1] = \\"B\\";
-})(RegularEnum || (RegularEnum = {}));
+const Value = 0.5;
+var NonExportEnum;
+(function (NonExportEnum) {
+    NonExportEnum[NonExportEnum[\\"A\\"] = 0] = \\"A\\";
+    NonExportEnum[NonExportEnum[\\"B\\"] = 1] = \\"B\\";
+})(NonExportEnum || (NonExportEnum = {}));
+function SomeFunc(inlineSomeEnum, inlineComputedEnum) {
+    if (inlineSomeEnum === 0 /* A */)
+        return 1000 /* D */;
+    if (inlineComputedEnum === -2 /* D */)
+        return 4 /* E */;
+    return Math.random() > Value ? NonExportEnum.A : NonExportEnum.B;
+}
+export default SomeFunc;
 //# sourceMappingURL=const-enum.js.map"
 `;
 
-exports[`transform export const enum into object literal test-case/const-enum.js.map 1`] = `"{\\"version\\":3,\\"file\\":\\"const-enum.js\\",\\"sourceRoot\\":\\"\\",\\"sources\\":[\\"const-enum.ts\\"],\\"names\\":[],\\"mappings\\":\\"AAAA,MAAM,OAAY,QAAQ;IACxB,IAAC;IACD,IAAC;IACD,UAAW;IACX,OAAQ;IACR,OAAC;EACF;AAED,MAAM,OAAY,YAAY;IAC5B,IAAC;IACD,IAAC;IACD,IAAC;IACD,KAAU;IACV,IAAU;IACV,KAAc;IACd,OAAuB;IACvB,KAA4B;IAC5B,MAAgB;IAChB,OAAa;IACb,IAAoB;EACrB;AAED,MAAM,CAAN,IAAY,WAGX;AAHD,WAAY,WAAW;IACrB,uCAAC,CAAA;IACD,uCAAC,CAAA;AACH,CAAC,EAHW,WAAW,KAAX,WAAW,QAGtB\\"}"`;
+exports[`transform export const enum into object literal test-case/const-enum.js.map 1`] = `"{\\"version\\":3,\\"file\\":\\"const-enum.js\\",\\"sourceRoot\\":\\"\\",\\"sources\\":[\\"const-enum.ts\\"],\\"names\\":[],\\"mappings\\":\\"AAAA,MAAM,OAAY,QAAQ;IACxB,IAAC;IACD,IAAC;IACD,UAAW;IACX,OAAQ;IACR,OAAC;EACF;AAED,MAAM,OAAY,YAAY;IAC5B,IAAC;IACD,IAAC;IACD,IAAC;IACD,KAAU;IACV,IAAU;IACV,KAAc;IACd,OAAuB;IACvB,KAA4B;IAC5B,MAAgB;IAChB,OAAa;IACb,IAAoB;EACrB;AAED,MAAM,KAAK,GAAG,GAAG,CAAC;AAElB,IAAK,aAGJ;AAHD,WAAK,aAAa;IAChB,2CAAC,CAAA;IACD,2CAAC,CAAA;AACH,CAAC,EAHI,aAAa,KAAb,aAAa,QAGjB;AAED,SAAS,QAAQ,CAAC,cAAwB,EAAE,kBAAgC;IAC1E,IAAI,cAAc,cAAe;QAAE,oBAAkB;IACrD,IAAI,kBAAkB,eAAmB;QAAE,iBAAsB;IACjE,OAAO,IAAI,CAAC,MAAM,EAAE,GAAG,KAAK,CAAC,CAAC,CAAC,aAAa,CAAC,CAAC,CAAC,CAAC,CAAC,aAAa,CAAC,CAAC,CAAC;AACnE,CAAC;AAED,eAAe,QAAQ,CAAC\\"}"`;

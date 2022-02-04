@@ -20,7 +20,17 @@ export const enum ComputedEnum {
   K = B & 1000 + H / 2,
 }
 
-export enum RegularEnum {
+const Value = 0.5;
+
+enum NonExportEnum {
   A,
   B,
 }
+
+function SomeFunc(inlineSomeEnum: SomeEnum, inlineComputedEnum: ComputedEnum) {
+  if (inlineSomeEnum === SomeEnum.A) return SomeEnum.D;
+  if (inlineComputedEnum === ComputedEnum.D) return ComputedEnum.E;
+  return Math.random() > Value ? NonExportEnum.A : NonExportEnum.B;
+}
+
+export default SomeFunc;
