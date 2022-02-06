@@ -19,7 +19,7 @@ const enum ComputedEnum {
   J = '1' + '2',
   K = B & 1000 + H / 2,
 }
-export { ComputedEnum, SomeEnum };
+export { ComputedEnum as CEnum, SomeEnum };
 
 export const enum DirectExportEnum {
   HI = 'HELLO',
