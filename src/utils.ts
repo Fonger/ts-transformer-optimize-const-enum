@@ -70,9 +70,32 @@ export function evaluate(
   throw new Error('unexpected evaluation for enum member: ' + expr.getText);
 }
 
-export function getModifier(node: ts.Node, modifier: ts.SyntaxKind) {
+export function hasModifier(node: ts.Node, modifier: ts.SyntaxKind) {
   return (
-    node.modifiers
-    && node.modifiers.find((mod: ts.Modifier) => mod.kind === modifier)
+    node.modifiers?.some((mod: ts.Modifier) => mod.kind === modifier)
   );
+}
+
+const cachedNames = new WeakMap<ts.SourceFile, string[]>();
+export function getExportedNamesOfSource(program: ts.Program, sourceFile: ts.SourceFile) {
+  const cached = cachedNames.get(sourceFile);
+  if (cached) return cached;
+
+  const typeChecker = program.getTypeChecker();
+  const sourceSymbol = typeChecker.getSymbolAtLocation(sourceFile);
+  let names: string[];
+
+  if (sourceSymbol) {
+    names = typeChecker.getExportsOfModule(sourceSymbol).map(s => {
+      if (s.flags & ts.SymbolFlags.Alias) {
+        return typeChecker.getAliasedSymbol(s).name;
+      }
+      return s.name;
+    });
+  } else {
+    names = [];
+  }
+
+  cachedNames.set(sourceFile, names);
+  return names;
 }

@@ -1,4 +1,4 @@
-export const enum SomeEnum {
+const enum SomeEnum {
   A,
   B,
   C = 'hello',
@@ -6,7 +6,7 @@ export const enum SomeEnum {
   E,
 }
 
-export const enum ComputedEnum {
+const enum ComputedEnum {
   A,
   B,
   C,
@@ -19,18 +19,33 @@ export const enum ComputedEnum {
   J = '1' + '2',
   K = B & 1000 + H / 2,
 }
+export { ComputedEnum, SomeEnum };
+
+export const enum DirectExportEnum {
+  HI = 'HELLO',
+  WD = 'WORLD',
+}
+
+const enum DefaultExportConstEnum {
+  X,
+}
+
+export default DefaultExportConstEnum;
 
 const Value = 0.5;
+
+const enum NonExportConstEnum {
+  A = 666,
+  B = 888,
+}
 
 enum NonExportEnum {
   A,
   B,
 }
 
-function SomeFunc(inlineSomeEnum: SomeEnum, inlineComputedEnum: ComputedEnum) {
+export function SomeFunc(inlineSomeEnum: SomeEnum, inlineComputedEnum: ComputedEnum) {
   if (inlineSomeEnum === SomeEnum.A) return SomeEnum.D;
   if (inlineComputedEnum === ComputedEnum.D) return ComputedEnum.E;
-  return Math.random() > Value ? NonExportEnum.A : NonExportEnum.B;
+  return Math.random() > Value ? NonExportConstEnum.A : NonExportEnum.B;
 }
-
-export default SomeFunc;

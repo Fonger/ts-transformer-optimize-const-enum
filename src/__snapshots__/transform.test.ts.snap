@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`transform export const enum into object literal test-case/const-enum.d.ts 1`] = `
-"export declare enum SomeEnum {
+"declare enum SomeEnum {
     A = 0,
     B = 1,
     C = \\"hello\\",
     D = 1000,
     E = 1001
 }
-export declare enum ComputedEnum {
+declare enum ComputedEnum {
     A = 0,
     B = 1,
     C = 2,
@@ -21,24 +21,36 @@ export declare enum ComputedEnum {
     J = \\"12\\",
     K = 1
 }
+export { ComputedEnum, SomeEnum };
+export declare enum DirectExportEnum {
+    HI = \\"HELLO\\",
+    WD = \\"WORLD\\"
+}
+declare enum DefaultExportConstEnum {
+    X = 0
+}
+export default DefaultExportConstEnum;
+declare const enum NonExportConstEnum {
+    A = 666,
+    B = 888
+}
 declare enum NonExportEnum {
     A = 0,
     B = 1
 }
-declare function SomeFunc(inlineSomeEnum: SomeEnum, inlineComputedEnum: ComputedEnum): SomeEnum.D | ComputedEnum | NonExportEnum;
-export default SomeFunc;
+export declare function SomeFunc(inlineSomeEnum: SomeEnum, inlineComputedEnum: ComputedEnum): SomeEnum.D | ComputedEnum | NonExportConstEnum.A | NonExportEnum.B;
 "
 `;
 
 exports[`transform export const enum into object literal test-case/const-enum.js 1`] = `
-"export const SomeEnum = {
+"const SomeEnum = {
     A: 0,
     B: 1,
     C: \\"hello\\",
     D: 1000,
     E: 1001
 };
-export const ComputedEnum = {
+const ComputedEnum = {
     A: 0,
     B: 1,
     C: 2,
@@ -51,21 +63,34 @@ export const ComputedEnum = {
     J: \\"12\\",
     K: 1
 };
+export { ComputedEnum, SomeEnum };
+export const DirectExportEnum = {
+    HI: \\"HELLO\\",
+    WD: \\"WORLD\\"
+};
+const DefaultExportConstEnum = {
+    X: 0
+};
+export default DefaultExportConstEnum;
 const Value = 0.5;
+var NonExportConstEnum;
+(function (NonExportConstEnum) {
+    NonExportConstEnum[NonExportConstEnum[\\"A\\"] = 666] = \\"A\\";
+    NonExportConstEnum[NonExportConstEnum[\\"B\\"] = 888] = \\"B\\";
+})(NonExportConstEnum || (NonExportConstEnum = {}));
 var NonExportEnum;
 (function (NonExportEnum) {
     NonExportEnum[NonExportEnum[\\"A\\"] = 0] = \\"A\\";
     NonExportEnum[NonExportEnum[\\"B\\"] = 1] = \\"B\\";
 })(NonExportEnum || (NonExportEnum = {}));
-function SomeFunc(inlineSomeEnum, inlineComputedEnum) {
+export function SomeFunc(inlineSomeEnum, inlineComputedEnum) {
     if (inlineSomeEnum === 0 /* A */)
         return 1000 /* D */;
     if (inlineComputedEnum === -2 /* D */)
         return 4 /* E */;
-    return Math.random() > Value ? NonExportEnum.A : NonExportEnum.B;
+    return Math.random() > Value ? 666 /* A */ : NonExportEnum.B;
 }
-export default SomeFunc;
 //# sourceMappingURL=const-enum.js.map"
 `;
 
-exports[`transform export const enum into object literal test-case/const-enum.js.map 1`] = `"{\\"version\\":3,\\"file\\":\\"const-enum.js\\",\\"sourceRoot\\":\\"\\",\\"sources\\":[\\"const-enum.ts\\"],\\"names\\":[],\\"mappings\\":\\"AAAA,MAAM,OAAY,QAAQ;IACxB,IAAC;IACD,IAAC;IACD,UAAW;IACX,OAAQ;IACR,OAAC;EACF;AAED,MAAM,OAAY,YAAY;IAC5B,IAAC;IACD,IAAC;IACD,IAAC;IACD,KAAU;IACV,IAAU;IACV,KAAc;IACd,OAAuB;IACvB,KAA4B;IAC5B,MAAgB;IAChB,OAAa;IACb,IAAoB;EACrB;AAED,MAAM,KAAK,GAAG,GAAG,CAAC;AAElB,IAAK,aAGJ;AAHD,WAAK,aAAa;IAChB,2CAAC,CAAA;IACD,2CAAC,CAAA;AACH,CAAC,EAHI,aAAa,KAAb,aAAa,QAGjB;AAED,SAAS,QAAQ,CAAC,cAAwB,EAAE,kBAAgC;IAC1E,IAAI,cAAc,cAAe;QAAE,oBAAkB;IACrD,IAAI,kBAAkB,eAAmB;QAAE,iBAAsB;IACjE,OAAO,IAAI,CAAC,MAAM,EAAE,GAAG,KAAK,CAAC,CAAC,CAAC,aAAa,CAAC,CAAC,CAAC,CAAC,CAAC,aAAa,CAAC,CAAC,CAAC;AACnE,CAAC;AAED,eAAe,QAAQ,CAAC\\"}"`;
+exports[`transform export const enum into object literal test-case/const-enum.js.map 1`] = `"{\\"version\\":3,\\"file\\":\\"const-enum.js\\",\\"sourceRoot\\":\\"\\",\\"sources\\":[\\"const-enum.ts\\"],\\"names\\":[],\\"mappings\\":\\"AAAA,MAAW,QAAQ;IACjB,IAAC;IACD,IAAC;IACD,UAAW;IACX,OAAQ;IACR,OAAC;EACF;AAED,MAAW,YAAY;IACrB,IAAC;IACD,IAAC;IACD,IAAC;IACD,KAAU;IACV,IAAU;IACV,KAAc;IACd,OAAuB;IACvB,KAA4B;IAC5B,MAAgB;IAChB,OAAa;IACb,IAAoB;EACrB;AACD,OAAO,EAAE,YAAY,EAAE,QAAQ,EAAE,CAAC;AAElC,MAAM,OAAY,gBAAgB;IAChC,WAAY;IACZ,WAAY;EACb;AAED,MAAW,sBAAsB;IAC/B,IAAC;EACF;AAED,eAAe,sBAAsB,CAAC;AAEtC,MAAM,KAAK,GAAG,GAAG,CAAC;AAElB,IAAW,kBAGV;AAHD,WAAW,kBAAkB;IAC3B,uDAAO,CAAA;IACP,uDAAO,CAAA;AACT,CAAC,EAHU,kBAAkB,KAAlB,kBAAkB,QAG5B;AAED,IAAK,aAGJ;AAHD,WAAK,aAAa;IAChB,2CAAC,CAAA;IACD,2CAAC,CAAA;AACH,CAAC,EAHI,aAAa,KAAb,aAAa,QAGjB;AAED,MAAM,UAAU,QAAQ,CAAC,cAAwB,EAAE,kBAAgC;IACjF,IAAI,cAAc,cAAe;QAAE,oBAAkB;IACrD,IAAI,kBAAkB,eAAmB;QAAE,iBAAsB;IACjE,OAAO,IAAI,CAAC,MAAM,EAAE,GAAG,KAAK,CAAC,CAAC,aAAsB,CAAC,CAAC,aAAa,CAAC,CAAC,CAAC;AACxE,CAAC\\"}"`;

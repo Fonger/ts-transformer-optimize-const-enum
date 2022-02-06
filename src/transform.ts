@@ -1,27 +1,32 @@
 import ts from 'typescript';
-import { evaluate, getModifier } from './utils';
+import { evaluate, getExportedNamesOfSource, hasModifier } from './utils';
 
 export default function(program: ts.Program, pluginOptions?: unknown) {
   return (ctx: ts.TransformationContext) => {
     return (sourceFile: ts.SourceFile) => {
-      const ambient = sourceFile.isDeclarationFile;
-
       return ts.visitEachChild(sourceFile, visitor, ctx);
-
       function visitor(node: ts.Node): ts.Node {
         if (!ts.isEnumDeclaration(node)) {
           return ts.visitEachChild(node, visitor, ctx);
         }
-        const exportModifier = getModifier(node, ts.SyntaxKind.ExportKeyword);
-        if (!exportModifier) return node;
-        const constModifier = getModifier(node, ts.SyntaxKind.ConstKeyword);
-        if (!constModifier) return node;
 
-        if (ambient) {
+        if (!hasModifier(node, ts.SyntaxKind.ConstKeyword)) {
+          return node;
+        }
+
+        if (!hasModifier(node, ts.SyntaxKind.ExportKeyword)) {
+          const exportedNames = getExportedNamesOfSource(program, sourceFile);
+
+          if (!exportedNames.includes(node.name.text)) {
+            return node;
+          }
+        }
+
+        if (sourceFile.isDeclarationFile) {
           return ts.visitEachChild(node, stripConstKeyword, ctx);
         }
 
-        return transformEnum(node, [exportModifier, constModifier]);
+        return transformEnum(node);
       }
     };
   };
@@ -30,7 +35,7 @@ export default function(program: ts.Program, pluginOptions?: unknown) {
     return node.kind === ts.SyntaxKind.ConstKeyword ? undefined : node;
   }
 
-  function transformEnum(node: ts.EnumDeclaration, modifiers: ts.Modifier[]) {
+  function transformEnum(node: ts.EnumDeclaration) {
     const members = node.members;
     const known = new Map<string, number | string>();
     const properties: ts.PropertyAssignment[] = [];
@@ -78,7 +83,7 @@ export default function(program: ts.Program, pluginOptions?: unknown) {
     }
 
     const result = ts.factory.createVariableStatement(
-      modifiers,
+      node.modifiers,
       ts.factory.createVariableDeclarationList(
         [
           ts.factory.createVariableDeclaration(
