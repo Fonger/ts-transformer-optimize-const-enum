@@ -76,22 +76,26 @@ export function hasModifier(node: ts.Node, modifier: ts.SyntaxKind) {
   );
 }
 
-const cachedMap = new WeakMap<ts.SourceFile, string[]>();
+const cachedNames = new WeakMap<ts.SourceFile, string[]>();
 export function getExportedNamesOfSource(program: ts.Program, sourceFile: ts.SourceFile) {
-  const cached = cachedMap.get(sourceFile);
+  const cached = cachedNames.get(sourceFile);
   if (cached) return cached;
 
   const typeChecker = program.getTypeChecker();
   const sourceSymbol = typeChecker.getSymbolAtLocation(sourceFile);
-  if (!sourceSymbol) return [];
+  let names: string[];
 
-  const symbols = typeChecker.getExportsOfModule(sourceSymbol).map(s => {
-    if (s.flags & ts.SymbolFlags.Alias) {
-      return typeChecker.getAliasedSymbol(s).name;
-    }
-    return s.name;
-  });
+  if (sourceSymbol) {
+    names = typeChecker.getExportsOfModule(sourceSymbol).map(s => {
+      if (s.flags & ts.SymbolFlags.Alias) {
+        return typeChecker.getAliasedSymbol(s).name;
+      }
+      return s.name;
+    });
+  } else {
+    names = [];
+  }
 
-  cachedMap.set(sourceFile, symbols);
-  return symbols;
+  cachedNames.set(sourceFile, names);
+  return names;
 }

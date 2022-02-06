@@ -5,7 +5,6 @@ export default function(program: ts.Program, pluginOptions?: unknown) {
   return (ctx: ts.TransformationContext) => {
     return (sourceFile: ts.SourceFile) => {
       return ts.visitEachChild(sourceFile, visitor, ctx);
-
       function visitor(node: ts.Node): ts.Node {
         if (!ts.isEnumDeclaration(node)) {
           return ts.visitEachChild(node, visitor, ctx);
@@ -16,7 +15,9 @@ export default function(program: ts.Program, pluginOptions?: unknown) {
         }
 
         if (!hasModifier(node, ts.SyntaxKind.ExportKeyword)) {
-          if (!getExportedNamesOfSource(program, sourceFile).includes(node.name.text)) {
+          const exportedNames = getExportedNamesOfSource(program, sourceFile);
+
+          if (!exportedNames.includes(node.name.text)) {
             return node;
           }
         }
