@@ -3,7 +3,7 @@ import ts from 'typescript';
 export function evaluate(
   expr: ts.Expression,
   known: Map<string, number | string>,
-): string | number | undefined {
+): string | number {
   if (ts.isPrefixUnaryExpression(expr)) {
     const value = evaluate(expr.operand, known);
     if (typeof value === 'number') {
@@ -60,13 +60,14 @@ export function evaluate(
   } else if (ts.isParenthesizedExpression(expr)) {
     return evaluate(expr.expression, known);
   } else if (ts.isIdentifier(expr)) {
-    if (!known.has(expr.text)) {
+    const value = known.get(expr.text);
+    if (value === undefined) {
       throw new Error('unsupported enum. must reference self value');
     }
-    return known.get(expr.text);
+    return value;
   }
 
-  return undefined;
+  throw new Error('unexpected evaluation for enum member: ' + expr.getText);
 }
 
 export function getModifier(node: ts.Node, modifier: ts.SyntaxKind) {
