@@ -148,18 +148,3 @@ export default {
   ],
 };
 ```
-
-# Caveats
-
-Currently, only immediate export const enum works. For example:
-
-```ts
-// The following works
-export const enum WorkingEnum {}
-
-// The following doesn't work
-const enum FailingEnum {}
-export FailEnum;
-```
-
-This may be fixed in future release.
