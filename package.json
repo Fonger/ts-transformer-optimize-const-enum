@@ -1,6 +1,6 @@
 {
   "name": "ts-transformer-optimize-const-enum",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A TypeScript transformer that optimize exported const enum into object literal",
   "main": "dist/cjs/transform.js",
   "module": "dist/ejs/transform.js",
