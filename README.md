@@ -127,11 +127,11 @@ module.exports = {
 };
 ```
 
-## Rollup (with rollup-plugin-typescript2)
+## Rollup (with @rollup/plugin-typescript or rollup-plugin-typescript2)
 
 ```js
 // rollup.config.js
-import typescript from 'rollup-plugin-typescript2';
+import typescript from '@rollup/plugin-typescript';
 import optimizeConstEnum from 'ts-transformer-optimize-const-enum';
 
 export default {
