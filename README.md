@@ -68,6 +68,8 @@ export var MyEnum;
 
 which is verbose. Not only can't you take advantage of enum inlining, but it also wastes a lot of bytes. That's the reason why this transform is made.
 
+Although keys of object literals can't be tree-shaken by webpack, however, the exported object literals have no side effects like enums do. If one of your code-splitting chunks does not use it, it will be completely erased.
+
 # Installation
 
 ```sh
