@@ -21,13 +21,13 @@ export const enum MyEnum {
 into object literal like this
 
 ```ts
-export const MyEnum {
+export const MyEnum = {
   A: 0,
   B: 1,
   C: 2,
   D: 10,
-  E: 400
-} as const
+  E: 400,
+} as const;
 ```
 
 and it also strips `const` in declaration file, to make your code compatible with [`--isolatedModules`](https://www.typescriptlang.org/tsconfig#isolatedModules)
