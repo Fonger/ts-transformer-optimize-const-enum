@@ -5,7 +5,7 @@
   "main": "dist/cjs/transform.js",
   "module": "dist/ejs/transform.js",
   "types": "dist/cjs/transform.d.ts",
-  "repository": "git@github.com:Fonger/ts-transformer-optimize-const-enum.git",
+  "repository": "git+https://github.com/Fonger/ts-transformer-optimize-const-enum.git",
   "author": "Fonger <5862369+Fonger@users.noreply.github.com>",
   "license": "MIT",
   "keywords": [
